@@ -1,0 +1,26 @@
+﻿@model FlowerShop.Models.Flower
+@{
+    ViewData["Title"] = "Edit";
+}
+<form asp-action="Edit">
+    <input type="hidden" asp-for="Id" />
+    <input asp-for="Name" /> <p>Name</p>
+    <input asp-for="Price" /> <p>Price</p>
+    <select asp-for="CategoryId">
+        @foreach (var c in (List<FlowerShop.Models.Category>)ViewBag.Categories)
+        {
+            <option value="@c.Id">@c.Name</option>
+        }
+    </select>
+    <p>Category</p>
+
+    <select asp-for="SupplierId">
+        @foreach (var s in (List<FlowerShop.Models.Supplier>)ViewBag.Suppliers)
+        {
+            <option value="@s.Id">@s.Name</option>
+        }
+    </select>
+    <p>Supplier</p>
+    <button type="submit">Edit</button>
+
+</form>

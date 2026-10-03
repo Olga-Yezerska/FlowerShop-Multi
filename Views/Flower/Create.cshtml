@@ -1,0 +1,29 @@
+﻿@model FlowerShop.Models.Flower
+@{
+    ViewData["Title"] = "Create";
+}
+<form asp-action="Create">
+    <input asp-for="Name" /> <p>Name</p>
+    <span asp-validation-for="Name" style="color:red"></span>
+    <br></br>
+    <input asp-for="Price" /> <p>Price</p>
+    <span asp-validation-for="Price" style="color:red"></span>
+    <br></br>
+    <select asp-for="CategoryId">
+        @foreach (var c in (List<FlowerShop.Models.Category>)ViewBag.Categories)
+        {
+            <option value="@c.Id">@c.Name</option>
+        }
+    </select>
+    <p>Category</p>
+
+    <select asp-for="SupplierId">
+        @foreach (var s in (List<FlowerShop.Models.Supplier>)ViewBag.Suppliers)
+        {
+            <option value="@s.Id">@s.Name</option>
+        }
+    </select>
+    <p>Supplier</p>
+    <button type="submit">Create</button>
+
+</form>

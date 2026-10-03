@@ -1,0 +1,13 @@
+﻿
+@model IEnumerable<dynamic>
+<h2>Statistics</h2>
+<table border="1">
+    <tr><th>Category</th><th>Avarage price</th></tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.CategoryName</td>
+            <td>@item.AveragePrice</td>
+        </tr>
+    }
+</table>

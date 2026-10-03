@@ -1,0 +1,61 @@
+﻿@model IEnumerable<FlowerShop.Models.Flower>
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1>Admin pannel</h1>
+    <br></br>
+    <a asp-action="Create">Create</a>
+    <a asp-action="Stats">Stats</a>
+
+    <br></br>
+    <form method="get">
+        <select name="categoryId">
+            <option value="">All categories</option>
+            @foreach (var c in (List<FlowerShop.Models.Category>)ViewBag.Categories)
+            {
+                <option value="@c.Id">@c.Name</option>
+            }
+        </select>
+        <select name="sort">
+            <option value="name">By name</option>
+            <option value="price">By price</option>
+        </select>
+        <button type="submit">Apply</button>
+    </form>
+
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th>Supplier</th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Supplier.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@item.Id" method="post" style="display:inline">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+</div>
