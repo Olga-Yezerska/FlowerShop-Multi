@@ -25,7 +25,6 @@ namespace FlowerShop
                 }
             });
 
-            // Add services to the container.
             builder.Services.AddControllersWithViews();
 
             builder.Services.AddScoped<IFlowerService, FlowerService>();
