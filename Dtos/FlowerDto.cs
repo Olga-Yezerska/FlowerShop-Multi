@@ -35,16 +35,22 @@ namespace FlowerShop.Dtos
     }
     public class FlowerRequest
     {
+        [Required]
+        [RegularExpression(@"^[a-zA-Z\s]+$")]
         public string Name 
         { 
             get; 
             set; 
         }
+            
+        [Required]
+        [Range(0.01, 100000)]
         public decimal Price 
         { 
             get; 
             set; 
         }
+
         public int CategoryId 
         { 
             get; 
