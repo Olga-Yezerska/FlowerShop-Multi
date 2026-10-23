@@ -24,7 +24,10 @@ namespace FlowerShop
                     options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"));
             });
 
+<<<<<<< HEAD
             // Сервіси
+=======
+>>>>>>> 2edb575b919d66f7a43df9378c1ba88748ad86b2
             builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<IFlowerService, FlowerService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
