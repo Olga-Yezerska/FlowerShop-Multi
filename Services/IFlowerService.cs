@@ -6,8 +6,8 @@ namespace FlowerShop.Services
     {
         Task<List<FlowerDto>> GetAllAsync(int? categoryId, string? search, string sort);
         Task<FlowerDto?> GetByIdAsync(int id);
-        Task<FlowerDto> CreateAsync(FlowerRequest request);
-        Task<bool> UpdateAsync(int id, FlowerRequest request);
-        Task<bool> DeleteAsync(int id);
+        Task<FlowerDto> CreateAsync(FlowerRequest request, int ownerId);
+        Task<OperationResult> UpdateAsync(int id, FlowerRequest request, int userId, bool isAdmin);
+        Task<OperationResult> DeleteAsync(int id, int userId, bool isAdmin);
     }
 }

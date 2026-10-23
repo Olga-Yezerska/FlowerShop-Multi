@@ -4,14 +4,19 @@ using FlowerShop.Models;
 using FlowerShop.Data;
 using FlowerShop.Services;
 using FlowerShop.Dtos;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FlowerShop.Controllers.Api
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "User,Admin")]
     public class FlowersController : ControllerBase
     {
         private readonly IFlowerService _flowerService;
+        private int CurrentUserId => int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+        private bool IsAdmin => User.IsInRole("Admin");
 
         public FlowersController(IFlowerService flowerService)
         {
@@ -43,7 +48,7 @@ namespace FlowerShop.Controllers.Api
             {
                 return BadRequest(ModelState);
             }
-            var createdFlower = await _flowerService.CreateAsync(request);
+            var createdFlower = await _flowerService.CreateAsync(request, CurrentUserId);
             return CreatedAtAction(nameof(GetById), new { id = createdFlower.Id }, createdFlower);
         }
 
@@ -54,21 +59,28 @@ namespace FlowerShop.Controllers.Api
             {
                 return BadRequest(ModelState);
             }
-            var updated = await _flowerService.UpdateAsync(id, request);
-            if (!updated)
+            var result = await _flowerService.UpdateAsync(id, request, CurrentUserId, IsAdmin);
+            if (result == OperationResult.NotFound)
             {
                 return NotFound();
             }
+            if (result == OperationResult.Forbidden)
+            {
+                return Forbid();
+            }
             return NoContent();
         }
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var deleted = await _flowerService.DeleteAsync(id);
-            if (!deleted)
+            var result = await _flowerService.DeleteAsync(id, CurrentUserId, IsAdmin);
+            if (result == OperationResult.NotFound)
             {
                 return NotFound();
+            }
+            if (result == OperationResult.Forbidden)
+            {
+                return Forbid();
             }
             return NoContent();
         }

@@ -1,8 +1,9 @@
 ﻿using FlowerShop.Dtos;
 using Microsoft.EntityFrameworkCore;
 using FlowerShop.Data;
-using FlowerShop.Dtos;
 using FlowerShop.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FlowerShop.Services 
 {
@@ -64,14 +65,16 @@ namespace FlowerShop.Services
                 };
             }
         }
-        public async Task<FlowerDto> CreateAsync(FlowerRequest request)
+        public async Task<FlowerDto> CreateAsync(FlowerRequest request, int ownerId)
         {
+            
             Flower flower = new Flower
             {
                 Name = request.Name,
                 Price = request.Price,
                 CategoryId = request.CategoryId,
-                SupplierId = request.SupplierId
+                SupplierId = request.SupplierId,
+                OwnerId = ownerId
             };
             _db.Flowers.Add(flower);
             await _db.SaveChangesAsync();
@@ -86,30 +89,38 @@ namespace FlowerShop.Services
                 SupplierName = supplier.Name
             };
         }
-        public async Task<bool> UpdateAsync(int id, FlowerRequest request)
+        public async Task<OperationResult> UpdateAsync(int id, FlowerRequest request, int userId, bool isAdmin)
         {
             var flower = await _db.Flowers.FindAsync(id);
             if (flower == null)
             {
-                return false;
+                return OperationResult.NotFound;
+            }
+            if (!isAdmin && flower.OwnerId != userId)
+            {
+                return OperationResult.Forbidden;
             }
             flower.Name = request.Name;
             flower.Price = request.Price;
             flower.CategoryId = request.CategoryId;
             flower.SupplierId = request.SupplierId;
             await _db.SaveChangesAsync();
-            return true;
+            return OperationResult.Success;
         }
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<OperationResult> DeleteAsync(int id, int userId, bool isAdmin)
         {
             var flower = await _db.Flowers.FindAsync(id);
             if (flower == null)
             {
-                return false;
+                return OperationResult.NotFound;
+            }
+            if (!isAdmin && flower.OwnerId != userId)
+            {
+                return OperationResult.Forbidden;
             }
             _db.Flowers.Remove(flower);
             await _db.SaveChangesAsync();
-            return true;
+            return OperationResult.Success;
         }
     }
 }
