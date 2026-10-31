@@ -18,5 +18,10 @@ namespace FlowerShop.Dtos
             get; 
             set; 
         }
+        public int UserId
+        {
+            get;
+            set;
+        }
     }
 }

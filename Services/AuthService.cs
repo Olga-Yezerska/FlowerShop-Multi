@@ -60,7 +60,8 @@ namespace FlowerShop.Services
             {
                 Token = GenerateToken(user),
                 Username = user.Username,
-                Role = user.Role
+                Role = user.Role,
+                UserId = user.Id,
             };
         }
 

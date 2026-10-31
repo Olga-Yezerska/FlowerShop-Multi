@@ -32,6 +32,21 @@ namespace FlowerShop.Dtos
             get; 
             set; 
         }
+        public int CategoryId 
+        { 
+            get; 
+            set; 
+        }
+        public int SupplierId 
+        { 
+            get; 
+            set; 
+        }
+        public int? OwnerId 
+        { 
+            get;
+            set; 
+        }
     }
     public class FlowerRequest
     {

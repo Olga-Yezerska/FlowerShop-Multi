@@ -26,14 +26,7 @@ namespace FlowerShop.Services
             {
                 query = query.Where(f => f.Name.Contains(search));
             }
-            if (sort == "price")
-            {
-                query = query.OrderBy(f => f.Price);
-            }
-            else
-            {
-                query = query.OrderBy(f => f.Name);
-            }
+            query = query.OrderBy(f => f.Name);
             var result = await query
                 .Select(f => new FlowerDto
                 {
@@ -41,9 +34,16 @@ namespace FlowerShop.Services
                     Name = f.Name,
                     Price = f.Price,
                     CategoryName = f.Category.Name,
-                    SupplierName = f.Supplier.Name
+                    SupplierName = f.Supplier.Name,
+                    CategoryId = f.CategoryId,      // у GetAllAsync (змінна називається f)
+                    SupplierId = f.SupplierId,
+                    OwnerId = f.OwnerId
                 })
                 .ToListAsync();
+            if (sort == "price")
+            {
+                result = result.OrderBy(f => f.Price).ToList();
+            }
             return result;
         }
         public async Task<FlowerDto?> GetByIdAsync(int id)
@@ -61,7 +61,10 @@ namespace FlowerShop.Services
                     Name = flower.Name,
                     Price = flower.Price,
                     CategoryName = flower.Category.Name,
-                    SupplierName = flower.Supplier.Name
+                    SupplierName = flower.Supplier.Name,
+                    CategoryId = flower.CategoryId,      
+                    SupplierId = flower.SupplierId,
+                    OwnerId = flower.OwnerId
                 };
             }
         }
@@ -86,7 +89,10 @@ namespace FlowerShop.Services
                 Name = flower.Name,
                 Price = flower.Price,
                 CategoryName = category.Name,
-                SupplierName = supplier.Name
+                SupplierName = supplier.Name,
+                CategoryId = flower.CategoryId,      
+                SupplierId = flower.SupplierId,
+                OwnerId = flower.OwnerId
             };
         }
         public async Task<OperationResult> UpdateAsync(int id, FlowerRequest request, int userId, bool isAdmin)
